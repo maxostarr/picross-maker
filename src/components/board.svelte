@@ -16,7 +16,7 @@
 				}
 			}
 			// remove trailing zeros
-			if (labels[i][labels[i].length - 1] === 0) {
+			if (labels[i][labels[i].length - 1] === 0 && labels[i].length > 1) {
 				labels[i].pop();
 			}
 		}
@@ -36,7 +36,7 @@
 				}
 			}
 			// remove trailing zeros
-			if (labels[j][labels[j].length - 1] === 0) {
+			if (labels[j][labels[j].length - 1] === 0 && labels[j].length > 1) {
 				labels[j].pop();
 			}
 		}
