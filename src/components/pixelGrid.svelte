@@ -26,11 +26,17 @@
 		playArray[rowIndex][colIndex] = !playArray[rowIndex][colIndex];
 	};
 
+	const handleMouseEnter = (rowIndex: number, colIndex: number) => (e) => {
+		if (e.buttons !== 1) return;
+		if (showSolution) return;
+		playArray[rowIndex][colIndex] = !playArray[rowIndex][colIndex];
+	};
+
 	let correct = $derived.by(() => {
 		let correct = true;
 
 		if (pixelArray.length !== playArray.length) return false;
-		if (pixelArray[0].length !== playArray[0].length) return false;
+		if (pixelArray[0]?.length !== playArray[0]?.length) return false;
 
 		for (let i = 0; i < pixelArray.length; i++) {
 			for (let j = 0; j < pixelArray[i].length; j++) {
@@ -65,7 +71,8 @@
 			{#each row as cell, colIndex}
 				<div
 					class="cell {cell ? 'filled' : 'empty'} {showGrid ? 'with-grid' : ''}"
-					onclick={() => handleCellClick(rowIndex, colIndex)}
+					onmousedown={() => handleCellClick(rowIndex, colIndex)}
+					onmouseenter={handleMouseEnter(rowIndex, colIndex)}
 				></div>
 			{/each}
 		{/each}
@@ -82,6 +89,7 @@
 		width: max-content;
 		height: max-content;
 		border: 1px solid #ccc;
+		user-select: none;
 	}
 
 	.cell {
