@@ -16,7 +16,7 @@
 		showSolution: boolean;
 	} = $props();
 
-	let playArray = $state(pixelArray.map((row) => row.map(() => false)));
+	let playArray = $derived.by(() => pixelArray.map((row) => row.map(() => false)));
 	let displayArray = $derived.by(() => (showSolution ? pixelArray : playArray));
 
 	console.log({ rowLabels, colLabels });
@@ -25,11 +25,25 @@
 		if (showSolution) return;
 		playArray[rowIndex][colIndex] = !playArray[rowIndex][colIndex];
 	};
+
+	let correct = $derived.by(() => {
+		let correct = true;
+		for (let i = 0; i < pixelArray.length; i++) {
+			for (let j = 0; j < pixelArray[i].length; j++) {
+				if (pixelArray[i][j] !== playArray[i][j]) {
+					correct = false;
+					break;
+				}
+			}
+			if (!correct) break;
+		}
+		return correct;
+	});
 </script>
 
 {#if displayArray.length > 0}
 	<div
-		class="grid-container"
+		class="grid-container {correct ? 'solved' : ''}"
 		style="--rows: {displayArray.length}; --cols: {displayArray[0].length};"
 	>
 		<div>&nbsp;</div>
@@ -99,5 +113,9 @@
 	.vertical {
 		flex-direction: column;
 		justify-content: flex-end;
+	}
+
+	.solved .cell.filled {
+		background-color: green;
 	}
 </style>
