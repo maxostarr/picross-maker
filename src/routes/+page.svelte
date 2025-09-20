@@ -2,7 +2,6 @@
 	import Board from '../components/board.svelte';
 	import ImageCanvas from '../components/imageCanvas.svelte';
 	import ImageUpload from '../components/imageUpload.svelte';
-	import PixelGrid from '../components/pixelGrid.svelte';
 
 	let file: File | undefined = $state();
 	let imageSrc = $derived(file ? URL.createObjectURL(file) : '');
