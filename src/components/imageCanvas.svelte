@@ -10,13 +10,14 @@
 
 	let canvas: HTMLCanvasElement;
 	let ctx: CanvasRenderingContext2D | null = null;
-	let isBlackAndWhite = false;
-	let oneBit = false;
-	let pixelate = false;
-	let invert = false;
+	let isBlackAndWhite = $state(false);
+	let oneBit = $state(false);
+	let pixelate = $state(false);
+	let invert = $state(false);
 
-	let outWidth = 10;
-	let outHeight = 10;
+	let outWidth = $state(10);
+	let outHeight = $state(10);
+	let pixelThreshold = $state(128);
 
 	onMount(() => {
 		if (canvas) {
@@ -79,7 +80,7 @@
 							const b = tempImageData.data[index + 2];
 							// Convert to grayscale value
 							const gray = Math.round((r + g + b) / 3);
-							row.push(gray < 128); // true for black, false for white
+							row.push(gray < pixelThreshold); // true for black, false for white
 						}
 						pixelArray.push(row);
 					}
@@ -94,7 +95,7 @@
 					const data = imageData.data;
 					for (let i = 0; i < data.length; i += 4) {
 						const avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
-						const bit = avg < 128 ? 0 : 255;
+						const bit = avg < pixelThreshold ? 0 : 255;
 						data[i] = bit; // Red
 						data[i + 1] = bit; // Green
 						data[i + 2] = bit; // Blue
@@ -151,6 +152,16 @@
 
 	<label for="invert">Invert Colors</label>
 	<input type="checkbox" name="Invert" id="invert" bind:checked={invert} oninput={loadImage} />
+
+	<label for="pixel_threshold">Pixel Threshold</label>
+	<input
+		type="number"
+		id="pixel_threshold"
+		min="0"
+		max="255"
+		bind:value={pixelThreshold}
+		oninput={pixelate || oneBit ? loadImage : null}
+	/>
 </div>
 
 <canvas bind:this={canvas}></canvas>
