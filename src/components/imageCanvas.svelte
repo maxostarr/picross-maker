@@ -6,7 +6,7 @@
 	// export let imageSrc = '';
 	// export let pixelArray: boolean[][] = [];
 
-	let { imageSrc, pixelArray = $bindable<boolean[][]>([]) } = $props();
+	let { imageSrc, pixelArray = $bindable<number[][]>([]) } = $props();
 
 	let canvas: HTMLCanvasElement;
 	let ctx: CanvasRenderingContext2D | null = null;
@@ -100,7 +100,7 @@
 							const b = tempImageData.data[index + 2];
 							// Convert to grayscale value
 							const gray = Math.round((r + g + b) / 3);
-							row.push(gray < pixelThreshold); // true for black, false for white
+							row.push(gray < pixelThreshold ? 1 : 0); // true for black, false for white
 						}
 						pixelArray.push(row);
 					}

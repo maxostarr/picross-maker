@@ -4,7 +4,7 @@
 
 	let { data } = $props();
 
-	let pixelArray: boolean[][] = dequeryifyBoard(data.board ?? '');
+	let pixelArray: number[][] = dequeryifyBoard(data.board ?? '');
 	let showSolution = $state(false);
 
 	console.log(pixelArray);

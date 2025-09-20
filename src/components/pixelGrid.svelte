@@ -9,27 +9,27 @@
 		colLabels,
 		showSolution
 	}: {
-		pixelArray: boolean[][];
+		pixelArray: number[][];
 		showGrid?: boolean;
 		rowLabels: number[][];
 		colLabels: number[][];
 		showSolution: boolean;
 	} = $props();
 
-	let playArray = $state(pixelArray.map((row) => row.map(() => false)));
+	let playArray = $state(pixelArray.map((row) => row.map(() => 0)));
 	let displayArray = $derived.by(() => (showSolution ? pixelArray : playArray));
 
 	console.log({ rowLabels, colLabels });
 
 	const handleCellClick = (rowIndex: number, colIndex: number) => {
 		if (showSolution) return;
-		playArray[rowIndex][colIndex] = !playArray[rowIndex][colIndex];
+		playArray[rowIndex][colIndex] = (playArray[rowIndex][colIndex] + 1) % 3;
 	};
 
 	const handleMouseEnter = (rowIndex: number, colIndex: number) => (e) => {
 		if (e.buttons !== 1) return;
 		if (showSolution) return;
-		playArray[rowIndex][colIndex] = !playArray[rowIndex][colIndex];
+		playArray[rowIndex][colIndex] = (playArray[rowIndex][colIndex] + 1) % 3;
 	};
 
 	let correct = $derived.by(() => {
@@ -70,10 +70,14 @@
 			</div>
 			{#each row as cell, colIndex}
 				<div
-					class="cell {cell ? 'filled' : 'empty'} {showGrid ? 'with-grid' : ''}"
+					class="cell {cell === 1 ? 'filled' : 'empty'} {showGrid ? 'with-grid' : ''}"
 					onmousedown={() => handleCellClick(rowIndex, colIndex)}
 					onmouseenter={handleMouseEnter(rowIndex, colIndex)}
-				></div>
+				>
+					<span>
+						{cell === 2 ? 'X' : ''}
+					</span>
+				</div>
 			{/each}
 		{/each}
 	</div>
@@ -98,6 +102,12 @@
 		min-height: 40px;
 		width: 100%;
 		height: 100%;
+		color: red;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		font-size: 20px;
+		text-align: center;
 	}
 
 	.filled {
