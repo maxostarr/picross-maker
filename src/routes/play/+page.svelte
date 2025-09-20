@@ -5,6 +5,7 @@
 	let { data } = $props();
 
 	let pixelArray: boolean[][] = dequeryifyBoard(data.board ?? '');
+	let showSolution = $state(false);
 
 	console.log(pixelArray);
 
@@ -20,4 +21,8 @@
 	// });
 </script>
 
-<Board {pixelArray} />
+<Board {pixelArray} {showSolution} />
+
+<button onclick={() => (showSolution = !showSolution)}>
+	{showSolution ? 'Hide Solution' : 'Show Solution'}
+</button>

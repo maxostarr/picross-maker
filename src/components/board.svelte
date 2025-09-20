@@ -1,7 +1,7 @@
 <script lang="ts">
 	import PixelGrid from './pixelGrid.svelte';
 
-	const { pixelArray } = $props<{ pixelArray: boolean[][] }>();
+	const { pixelArray, showSolution } = $props<{ pixelArray: boolean[][]; showSolution: boolean }>();
 	let showGrid = $state(true);
 
 	let rowLabels = $derived.by(() => {
@@ -44,4 +44,4 @@
 	});
 </script>
 
-<PixelGrid {rowLabels} {colLabels} {pixelArray} {showGrid} />
+<PixelGrid {rowLabels} {colLabels} {pixelArray} {showGrid} {showSolution} />

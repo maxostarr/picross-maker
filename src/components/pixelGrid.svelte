@@ -2,18 +2,36 @@
 <script lang="ts">
 	// export let pixelArray: boolean[][] = [];
 	// export let showGrid: boolean = true;
-	const { pixelArray, showGrid, rowLabels, colLabels } = $props<{
+	const {
+		pixelArray,
+		showGrid,
+		rowLabels,
+		colLabels,
+		showSolution
+	}: {
 		pixelArray: boolean[][];
 		showGrid?: boolean;
 		rowLabels: number[][];
 		colLabels: number[][];
-	}>();
+		showSolution: boolean;
+	} = $props();
+
+	let playArray = $state(pixelArray.map((row) => row.map(() => false)));
+	let displayArray = $derived.by(() => (showSolution ? pixelArray : playArray));
 
 	console.log({ rowLabels, colLabels });
+
+	const handleCellClick = (rowIndex: number, colIndex: number) => {
+		if (showSolution) return;
+		playArray[rowIndex][colIndex] = !playArray[rowIndex][colIndex];
+	};
 </script>
 
-{#if pixelArray.length > 0}
-	<div class="grid-container" style="--rows: {pixelArray.length}; --cols: {pixelArray[0].length};">
+{#if displayArray.length > 0}
+	<div
+		class="grid-container"
+		style="--rows: {displayArray.length}; --cols: {displayArray[0].length};"
+	>
 		<div>&nbsp;</div>
 		{#each colLabels as colLabel}
 			<div>
@@ -22,12 +40,15 @@
 				{/each}
 			</div>
 		{/each}
-		{#each pixelArray as row, rowIndex}
+		{#each displayArray as row, rowIndex}
 			<div class="label with-grid">
 				{#each rowLabels[rowIndex] as label}<div>{label}</div>{/each}
 			</div>
 			{#each row as cell, colIndex}
-				<div class="cell {cell ? 'filled' : 'empty'} {showGrid ? 'with-grid' : ''}"></div>
+				<div
+					class="cell {cell ? 'filled' : 'empty'} {showGrid ? 'with-grid' : ''}"
+					onclick={() => handleCellClick(rowIndex, colIndex)}
+				></div>
 			{/each}
 		{/each}
 	</div>

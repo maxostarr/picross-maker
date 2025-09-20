@@ -20,5 +20,5 @@
 
 <ImageUpload bind:file />
 <ImageCanvas {imageSrc} bind:pixelArray />
-<Board {pixelArray} />
+<Board {pixelArray} showSolution />
 <button onclick={play}>Play</button>
