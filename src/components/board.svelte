@@ -15,7 +15,10 @@
 					labels[i].push(0);
 				}
 			}
-			labels[i] = labels[i].filter(Boolean);
+			// remove trailing zeros
+			if (labels[i][labels[i].length - 1] === 0) {
+				labels[i].pop();
+			}
 		}
 		return labels;
 	});
@@ -32,7 +35,10 @@
 					labels[j].push(0);
 				}
 			}
-			labels[j] = labels[j].filter(Boolean);
+			// remove trailing zeros
+			if (labels[j][labels[j].length - 1] === 0) {
+				labels[j].pop();
+			}
 		}
 		return labels;
 	});

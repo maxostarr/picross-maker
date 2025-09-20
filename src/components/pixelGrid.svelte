@@ -18,12 +18,12 @@
 		{#each colLabels as colLabel}
 			<div>
 				{#each colLabel as label}
-					<div class="label vertical">{label}</div>
+					<div class="label vertical with-grid">{label}</div>
 				{/each}
 			</div>
 		{/each}
 		{#each pixelArray as row, rowIndex}
-			<div class="label">
+			<div class="label with-grid">
 				{#each rowLabels[rowIndex] as label}<div>{label}</div>{/each}
 			</div>
 			{#each row as cell, colIndex}
@@ -38,8 +38,8 @@
 <style>
 	.grid-container {
 		display: grid;
-		grid-template-rows: 20px repeat(var(--rows), 1fr);
-		grid-template-columns: 20px repeat(var(--cols), 1fr);
+		grid-template-rows: 50px repeat(var(--rows), 1fr);
+		grid-template-columns: 50px repeat(var(--cols), 1fr);
 		width: max-content;
 		height: max-content;
 		border: 1px solid #ccc;
@@ -68,9 +68,14 @@
 	.label {
 		display: flex;
 		font-size: 0.75rem;
+		width: 100%;
+		height: 100%;
+		justify-content: flex-end;
+		align-items: center;
 	}
 
 	.vertical {
 		flex-direction: column;
+		justify-content: flex-end;
 	}
 </style>
