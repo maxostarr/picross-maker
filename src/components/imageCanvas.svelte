@@ -19,6 +19,11 @@
 	let outHeight = $state(10);
 	let pixelThreshold = $state(128);
 
+	let vCropStart = $state(0);
+	let vCropEnd = $state(0);
+	let hCropStart = $state(0);
+	let hCropEnd = $state(0);
+
 	onMount(() => {
 		if (canvas) {
 			ctx = canvas.getContext('2d');
@@ -33,10 +38,25 @@
 			img.onload = () => {
 				canvas.width = img.width;
 				canvas.height = img.height;
+
+				if (vCropEnd === 0) vCropEnd = img.height;
+				if (hCropEnd === 0) hCropEnd = img.width;
+
 				if (!ctx) return;
 				ctx.drawImage(img, 0, 0);
 				let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
 				if (!imageData) return;
+
+				// Apply cropping
+				const cropWidth = hCropEnd - hCropStart;
+				const cropHeight = vCropEnd - vCropStart;
+				if (cropWidth > 0 && cropHeight > 0 && cropWidth <= img.width && cropHeight <= img.height) {
+					const croppedData = ctx.getImageData(hCropStart, vCropStart, cropWidth, cropHeight);
+					canvas.width = cropWidth;
+					canvas.height = cropHeight;
+					ctx.putImageData(croppedData, 0, 0);
+					imageData = croppedData;
+				}
 
 				if (invert) {
 					const data = imageData.data;
@@ -162,6 +182,18 @@
 		bind:value={pixelThreshold}
 		oninput={pixelate || oneBit ? loadImage : null}
 	/>
+
+	<label for="v_crop_start">Vertical Crop Start</label>
+	<input type="number" id="v_crop_start" min="0" bind:value={vCropStart} oninput={loadImage} />
+
+	<label for="v_crop_end">Vertical Crop End</label>
+	<input type="number" id="v_crop_end" min="0" bind:value={vCropEnd} oninput={loadImage} />
+
+	<label for="h_crop_start">Horizontal Crop Start</label>
+	<input type="number" id="h_crop_start" min="0" bind:value={hCropStart} oninput={loadImage} />
+
+	<label for="h_crop_end">Horizontal Crop End</label>
+	<input type="number" id="h_crop_end" min="0" bind:value={hCropEnd} oninput={loadImage} />
 </div>
 
 <canvas bind:this={canvas}></canvas>
