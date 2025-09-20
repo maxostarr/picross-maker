@@ -16,7 +16,7 @@
 		showSolution: boolean;
 	} = $props();
 
-	let playArray = $derived.by(() => pixelArray.map((row) => row.map(() => false)));
+	let playArray = $state(pixelArray.map((row) => row.map(() => false)));
 	let displayArray = $derived.by(() => (showSolution ? pixelArray : playArray));
 
 	console.log({ rowLabels, colLabels });
@@ -28,6 +28,10 @@
 
 	let correct = $derived.by(() => {
 		let correct = true;
+
+		if (pixelArray.length !== playArray.length) return false;
+		if (pixelArray[0].length !== playArray[0].length) return false;
+
 		for (let i = 0; i < pixelArray.length; i++) {
 			for (let j = 0; j < pixelArray[i].length; j++) {
 				if (pixelArray[i][j] !== playArray[i][j]) {
