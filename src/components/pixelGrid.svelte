@@ -1,46 +1,49 @@
 <!-- Takes in a 2d array of booleans and draws as a grid of black and white squares -->
 <script lang="ts">
-	// export let pixelArray: boolean[][] = [];
+	// export let imageGrid: boolean[][] = [];
 	// export let showGrid: boolean = true;
 	const {
-		pixelArray,
+		// imageGrid,
 		showGrid,
-		rowLabels,
-		colLabels,
+		// rowLabels,
+		// colLabels,
 		showSolution
 	}: {
-		pixelArray: number[][];
+		// imageGrid: number[][];
 		showGrid?: boolean;
-		rowLabels: number[][];
-		colLabels: number[][];
+		// rowLabels: number[][];
+		// colLabels: number[][];
 		showSolution: boolean;
 	} = $props();
 
-	let playArray = $state(pixelArray.map((row) => row.map(() => 0)));
-	let displayArray = $derived.by(() => (showSolution ? pixelArray : playArray));
+	// let playGrid = $state(imageGrid.map((row) => row.map(() => 0)));
 
-	console.log({ rowLabels, colLabels });
+	import { getImageGrid, getPlayGrid, rowLabels, colLabels, toggleCell } from '../lib/board.svelte';
+	let imageGrid = $derived(getImageGrid());
+	let playGrid = $derived(getPlayGrid());
+
+	let displayArray = $derived.by(() => (showSolution ? imageGrid : playGrid));
 
 	const handleCellClick = (rowIndex: number, colIndex: number) => {
 		if (showSolution) return;
-		playArray[rowIndex][colIndex] = (playArray[rowIndex][colIndex] + 1) % 3;
+		toggleCell(rowIndex, colIndex);
 	};
 
 	const handleMouseEnter = (rowIndex: number, colIndex: number) => (e) => {
 		if (e.buttons !== 1) return;
 		if (showSolution) return;
-		playArray[rowIndex][colIndex] = (playArray[rowIndex][colIndex] + 1) % 3;
+		toggleCell(rowIndex, colIndex);
 	};
 
 	let correct = $derived.by(() => {
 		let correct = true;
 
-		if (pixelArray.length !== playArray.length) return false;
-		if (pixelArray[0]?.length !== playArray[0]?.length) return false;
+		if (imageGrid.length !== playGrid.length) return false;
+		if (imageGrid[0]?.length !== playGrid[0]?.length) return false;
 
-		for (let i = 0; i < pixelArray.length; i++) {
-			for (let j = 0; j < pixelArray[i].length; j++) {
-				if (pixelArray[i][j] !== playArray[i][j]) {
+		for (let i = 0; i < imageGrid.length; i++) {
+			for (let j = 0; j < imageGrid[i].length; j++) {
+				if (imageGrid[i][j] !== playGrid[i][j]) {
 					correct = false;
 					break;
 				}

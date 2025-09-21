@@ -1,15 +1,15 @@
 <script lang="ts">
-	import Board from '../components/board.svelte';
 	import ImageCanvas from '../components/imageCanvas.svelte';
 	import ImageUpload from '../components/imageUpload.svelte';
+	import PixelGrid from '../components/pixelGrid.svelte';
 	import { queryifyBoard } from '../lib';
+	import { imageGrid } from '../lib/board.svelte';
 
 	let file: File | undefined = $state();
 	let imageSrc = $derived(file ? URL.createObjectURL(file) : '');
-	let pixelArray: boolean[][] = $state([]);
 
 	function play() {
-		const boardQuery = queryifyBoard(pixelArray);
+		const boardQuery = queryifyBoard(imageGrid);
 
 		const url = new URL(window.location.href);
 		url.pathname = '/play';
@@ -19,6 +19,6 @@
 </script>
 
 <ImageUpload bind:file />
-<ImageCanvas {imageSrc} bind:pixelArray />
-<Board {pixelArray} showSolution />
+<ImageCanvas {imageSrc} />
+<PixelGrid showSolution />
 <button onclick={play}>Play</button>
