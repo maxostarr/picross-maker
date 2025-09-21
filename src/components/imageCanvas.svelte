@@ -78,6 +78,7 @@
 				pixelArray = [];
 
 				const tempImageData = tempCtx.getImageData(0, 0, outWidth, outHeight);
+				console.log('Temp image data:', tempImageData);
 				for (let y = 0; y < outHeight; y++) {
 					const row = [];
 					for (let x = 0; x < outWidth; x++) {
@@ -85,9 +86,10 @@
 						const r = tempImageData.data[index];
 						const g = tempImageData.data[index + 1];
 						const b = tempImageData.data[index + 2];
+						const a = tempImageData.data[index + 3];
 						// Convert to grayscale value
-						const gray = Math.round((r + g + b) / 3);
-						row.push(gray < pixelThreshold ? 1 : 0); // true for black, false for white
+						const gray = Math.round((r + g + b + a) / 4);
+						row.push(gray < pixelThreshold ? 1 : 0);
 					}
 					pixelArray.push(row);
 				}
@@ -120,6 +122,25 @@
 
 	<label for="h_crop_end">Horizontal Crop End</label>
 	<input type="number" id="h_crop_end" min="0" bind:value={hCropEnd} oninput={loadImage} />
+
+	<label for="out_width">Output Width</label>
+	<input type="number" id="out_width" min="1" bind:value={outWidth} oninput={loadImage} />
+
+	<label for="out_height">Output Height</label>
+	<input type="number" id="out_height" min="1" bind:value={outHeight} oninput={loadImage} />
+
+	<label for="pixel_threshold">Pixel Threshold</label>
+	<input
+		type="number"
+		id="pixel_threshold"
+		min="0"
+		max="255"
+		bind:value={pixelThreshold}
+		oninput={loadImage}
+	/>
+
+	<label for="invert">Invert Colors</label>
+	<input type="checkbox" id="invert" bind:checked={invert} oninput={loadImage} />
 </div>
 
 <canvas bind:this={canvas}></canvas>

@@ -85,10 +85,10 @@
 	>
 		<div>&nbsp;</div>
 		{#each colLabels as colLabel, colIndex}
-			<div>
+			<div class="label vertical with-grid">
 				{#each colLabel as label, labelIndex}
 					<div
-						class="label vertical with-grid
+						class="
             {getColLabelStateClass(colIndex, labelIndex)}
           "
 					>
@@ -125,8 +125,8 @@
 <style>
 	.grid-container {
 		display: grid;
-		grid-template-rows: 50px repeat(var(--rows), 1fr);
-		grid-template-columns: 50px repeat(var(--cols), 1fr);
+		grid-template-rows: min-content repeat(var(--rows), 1fr);
+		grid-template-columns: min-content repeat(var(--cols), 1fr);
 		width: max-content;
 		height: max-content;
 		border: 1px solid #ccc;

@@ -102,7 +102,6 @@ export function updateColLabelState ( colIndex: number ): void {
     labelIndex++;
   }
   colLabelState[ colIndex ] = newState;
-  console.log( 'Col label state updated:', $state.snapshot( colLabelState ) );
 }
 
 export function getFinishedColLables ( colIndex: number ): number[] {
@@ -174,5 +173,6 @@ export function getColLabels (): number[][] {
     }
     labels.push( colLabels );
   }
+  console.log( 'Column labels:', labels );
   return labels;
 }
