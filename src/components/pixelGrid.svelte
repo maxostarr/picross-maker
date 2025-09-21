@@ -67,7 +67,11 @@
 
 		for (let i = 0; i < imageGrid.length; i++) {
 			for (let j = 0; j < imageGrid[i].length; j++) {
-				if (imageGrid[i][j] !== playGrid[i][j]) {
+				if (imageGrid[i][j] === 1 && playGrid[i][j] !== 1) {
+					correct = false;
+					break;
+				}
+				if (imageGrid[i][j] === 0 && playGrid[i][j] === 1) {
 					correct = false;
 					break;
 				}

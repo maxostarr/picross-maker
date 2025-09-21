@@ -56,15 +56,15 @@
 					imageData = croppedData;
 				}
 
-				if (invert) {
-					const data = imageData.data;
-					for (let i = 0; i < data.length; i += 4) {
-						data[i] = 255 - data[i]; // Red
-						data[i + 1] = 255 - data[i + 1]; // Green
-						data[i + 2] = 255 - data[i + 2]; // Blue
-					}
-					ctx.putImageData(imageData, 0, 0);
-				}
+				// if (invert) {
+				// 	const data = imageData.data;
+				// 	for (let i = 0; i < data.length; i += 4) {
+				// 		data[i] = 255 - data[i]; // Red
+				// 		data[i + 1] = 255 - data[i + 1]; // Green
+				// 		data[i + 2] = 255 - data[i + 2]; // Blue
+				// 	}
+				// 	ctx.putImageData(imageData, 0, 0);
+				// }
 
 				const tempCanvas = document.createElement('canvas');
 				const tempCtx = tempCanvas.getContext('2d');
@@ -89,7 +89,7 @@
 						const a = tempImageData.data[index + 3];
 						// Convert to grayscale value
 						const gray = Math.round((r + g + b + a) / 4);
-						row.push(gray < pixelThreshold ? 1 : 0);
+						row.push(gray < pixelThreshold ? (invert ? 0 : 1) : invert ? 1 : 0);
 					}
 					pixelArray.push(row);
 				}
