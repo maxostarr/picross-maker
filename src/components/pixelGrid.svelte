@@ -18,21 +18,45 @@
 
 	// let playGrid = $state(imageGrid.map((row) => row.map(() => 0)));
 
-	import { getImageGrid, getPlayGrid, rowLabels, colLabels, toggleCell } from '../lib/board.svelte';
+	import {
+		getImageGrid,
+		getPlayGrid,
+		getRowLabels,
+		getColLabels,
+		toggleCell,
+		getRowLabelState,
+		getColLabelState
+	} from '../lib/board.svelte';
 	let imageGrid = $derived(getImageGrid());
 	let playGrid = $derived(getPlayGrid());
 
 	let displayArray = $derived.by(() => (showSolution ? imageGrid : playGrid));
+	let colLabels = $derived(getColLabels());
+	let rowLabels = $derived(getRowLabels());
+	let rowLabelState = $derived(getRowLabelState());
+	let colLabelState = $derived(getColLabelState());
 
 	const handleCellClick = (rowIndex: number, colIndex: number) => {
 		if (showSolution) return;
 		toggleCell(rowIndex, colIndex);
 	};
 
-	const handleMouseEnter = (rowIndex: number, colIndex: number) => (e) => {
+	const handleMouseEnter = (rowIndex: number, colIndex: number) => (e: MouseEvent) => {
 		if (e.buttons !== 1) return;
 		if (showSolution) return;
 		toggleCell(rowIndex, colIndex);
+	};
+
+	const getRowLabelStateClass = (rowIndex: number, labelIndex: number) => {
+		if (rowLabelState[rowIndex]?.[labelIndex] === 1) return 'correct';
+		if (rowLabelState[rowIndex]?.[labelIndex] === 2) return 'incorrect';
+		return '';
+	};
+
+	const getColLabelStateClass = (colIndex: number, labelIndex: number) => {
+		if (colLabelState[colIndex]?.[labelIndex] === 1) return 'correct';
+		if (colLabelState[colIndex]?.[labelIndex] === 2) return 'incorrect';
+		return '';
 	};
 
 	let correct = $derived.by(() => {
@@ -60,16 +84,26 @@
 		style="--rows: {displayArray.length}; --cols: {displayArray[0].length};"
 	>
 		<div>&nbsp;</div>
-		{#each colLabels as colLabel}
+		{#each colLabels as colLabel, colIndex}
 			<div>
-				{#each colLabel as label}
-					<div class="label vertical with-grid">{label}</div>
+				{#each colLabel as label, labelIndex}
+					<div
+						class="label vertical with-grid
+            {getColLabelStateClass(colIndex, labelIndex)}
+          "
+					>
+						{label}
+					</div>
 				{/each}
 			</div>
 		{/each}
 		{#each displayArray as row, rowIndex}
 			<div class="label with-grid">
-				{#each rowLabels[rowIndex] as label}<div>{label}</div>{/each}
+				{#each rowLabels[rowIndex] as label, labelIndex}<div
+						class={getRowLabelStateClass(rowIndex, labelIndex)}
+					>
+						{label}
+					</div>{/each}
 			</div>
 			{#each row as cell, colIndex}
 				<div
@@ -133,6 +167,14 @@
 		justify-content: flex-end;
 		align-items: center;
 		gap: 1ch;
+	}
+
+	.correct {
+		color: green;
+	}
+
+	.incorrect {
+		color: red;
 	}
 
 	.vertical {

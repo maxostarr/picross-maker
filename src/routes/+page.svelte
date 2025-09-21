@@ -3,13 +3,13 @@
 	import ImageUpload from '../components/imageUpload.svelte';
 	import PixelGrid from '../components/pixelGrid.svelte';
 	import { queryifyBoard } from '../lib';
-	import { imageGrid } from '../lib/board.svelte';
+	import { getImageGrid } from '../lib/board.svelte';
 
 	let file: File | undefined = $state();
 	let imageSrc = $derived(file ? URL.createObjectURL(file) : '');
 
 	function play() {
-		const boardQuery = queryifyBoard(imageGrid);
+		const boardQuery = queryifyBoard(getImageGrid());
 
 		const url = new URL(window.location.href);
 		url.pathname = '/play';

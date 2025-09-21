@@ -1,14 +1,19 @@
 <script lang="ts">
-	import Board from '../../components/board.svelte';
-	import { dequeryifyBoard } from '../../lib';
+	import PixelGrid from '../../components/pixelGrid.svelte';
+	import { dequeryifyBoard } from '$lib';
+	import { setImageGrid } from '$lib/board.svelte';
 
 	let { data } = $props();
-
-	let pixelArray: number[][] = dequeryifyBoard(data.board ?? '');
 	let showSolution = $state(false);
+
+	if (data.board) {
+		const board = dequeryifyBoard(data.board);
+		// Set the imageGrid in the store
+		setImageGrid(board);
+	}
 </script>
 
-<Board {pixelArray} {showSolution} />
+<PixelGrid {showSolution} showGrid />
 
 <button onclick={() => (showSolution = !showSolution)}>
 	{showSolution ? 'Hide Solution' : 'Show Solution'}
